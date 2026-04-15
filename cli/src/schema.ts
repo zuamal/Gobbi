@@ -40,3 +40,29 @@ export type Manifest = z.infer<typeof ManifestSchema>
 export function parseManifest(raw: unknown): Manifest {
   return ManifestSchema.parse(raw)
 }
+
+export const LockFileEntrySchema = z.discriminatedUnion('strategy', [
+  z.object({
+    path: z.string(),
+    checksum: z.string(),
+    strategy: z.literal('overwrite'),
+  }),
+  z.object({
+    path: z.string(),
+    checksum: z.string(),
+    strategy: z.literal('merge'),
+    original_checksum: z.string(),
+    backup_path: z.string(),
+  }),
+])
+
+export const LockFileSchema = z.object({
+  harness: z.string(),
+  agent: z.string(),
+  version: z.string(),
+  installed_at: z.string(),
+  files: z.array(LockFileEntrySchema),
+})
+
+export type LockFile = z.infer<typeof LockFileSchema>
+export type LockFileEntry = z.infer<typeof LockFileEntrySchema>
