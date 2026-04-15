@@ -64,7 +64,50 @@ gobbi uninstall <harness-name>
 gobbi benchmark <harness-name>
 ```
 
-### 3.1 `gobbi recommend`
+### 3.1 `gobbi list`
+
+**Without `--agent`:** Groups all harnesses by agent and displays the full registry.
+
+**With `--agent <name>`:** Displays only harnesses for the specified agent.
+
+**Output:**
+
+```
+$ gobbi list
+
+  claude-code (3 harnesses)
+  ──────────────────────────────────────────────────────────────
+  Name                       Version  Published    Style
+  celesteanders-harness      1.2.0    2026-04-01   tdd, plan-first, evaluator-separated
+  claude-code-harness        1.0.1    2026-03-15   plan-work-review, guardrail
+  humanlayer-minimal         0.9.0    2026-02-20   minimal, ship-fast
+
+  opencode (1 harness)
+  ──────────────────────────────────────────────────────────────
+  Name                       Version  Published    Style
+  oh-my-openagent            2.1.0    2026-04-05   multi-agent, orchestration
+
+  Total: 4 harnesses
+
+$ gobbi list --agent claude-code
+
+  claude-code (3 harnesses)
+  ──────────────────────────────────────────────────────────────
+  Name                       Version  Published    Style
+  celesteanders-harness      1.2.0    2026-04-01   tdd, plan-first, evaluator-separated
+  claude-code-harness        1.0.1    2026-03-15   plan-work-review, guardrail
+  humanlayer-minimal         0.9.0    2026-02-20   minimal, ship-fast
+
+  Total: 3 harnesses
+```
+
+**Columns:** Name, Version, Published (`published_at` from manifest), Style (`tags.style` from manifest).
+
+**Footer:** Total harness count displayed below the table.
+
+---
+
+### 3.2 `gobbi recommend`
 
 **Input modes:**
 
@@ -93,7 +136,14 @@ Harnesses without benchmark results are displayed in a separate **Unranked** sec
 
 **Sorting:** Default is `pass_rate` descending. User can change with `--sort tokens`, `--sort time`, `--sort name`.
 
-### 3.2 `gobbi install`
+| Field | Direction | Rationale |
+|---|---|---|
+| `pass_rate` | Descending | Higher is better |
+| `tokens` | Ascending | Lower is better |
+| `time` | Ascending | Lower is better |
+| `name` | Ascending | Alphabetical |
+
+### 3.3 `gobbi install`
 
 **Default behavior:** Interactive component checklist.
 
@@ -135,13 +185,50 @@ $ gobbi install celesteanders-harness
 | `.json` files | Shallow merge: keep existing keys, add new keys, prompt on conflicting keys |
 | Other files | Overwrite or skip only (no merge option) |
 
-**Lock file:** Generates `.gobbi-lock.json` recording installed components for `uninstall` support.
+**Lock file:** Generates `.gobbi-lock.json` in the project root recording installed components for `uninstall` support. All checksums use SHA-256.
 
-### 3.3 `gobbi uninstall`
+```json
+{
+  "harness": "celesteanders-harness",
+  "agent": "claude-code",
+  "version": "1.2.0",
+  "installed_at": "2026-04-12T09:00:00Z",
+  "files": [
+    {
+      "path": "CLAUDE.md",
+      "checksum": "sha256:<hash>",
+      "strategy": "merge",
+      "original_checksum": "sha256:<hash>",
+      "backup_path": ".gobbi/backups/CLAUDE.md"
+    },
+    {
+      "path": "skills/commit.md",
+      "checksum": "sha256:<hash>",
+      "strategy": "overwrite"
+    }
+  ]
+}
+```
 
-Reads `.gobbi-lock.json` and removes installed files. Prompts before deletion if files have been modified since installation (checksum comparison).
+**Fields:**
 
-### 3.4 `gobbi benchmark`
+- `strategy`: one of `overwrite`, `merge`, `skip`
+- `original_checksum`: present only when `strategy` is `merge` — checksum of the file before merging
+- `backup_path`: present only when `strategy` is `merge` — original file backed up to `.gobbi/backups/`
+
+**`gobbi uninstall` behavior per strategy:**
+
+| Strategy | Behavior |
+|---|---|
+| `overwrite` | Compare current checksum against lock. If match, delete. If mismatch, prompt before deletion. |
+| `merge` | Compare current checksum against lock. If match, restore from `backup_path`. If mismatch, print manual guidance and skip. |
+| `skip` | No action. |
+
+### 3.4 `gobbi uninstall`
+
+Reads `.gobbi-lock.json` and removes installed files. Prompts before deletion if files have been modified since installation (SHA-256 checksum comparison). See lock file schema in §3.3 for per-strategy behavior.
+
+### 3.5 `gobbi benchmark`
 
 Runs the standardized benchmark suite against a harness in a Docker container.
 
@@ -156,14 +243,14 @@ $ gobbi benchmark celesteanders-harness
   Running... [████████░░░░░░░░] 8/20
 
   Results:
-  Pass rate: 67.0% (14/20 tasks)  [sic: 13.4/20]
+  Pass rate: 67.0% (13/20 tasks)
   Avg tokens: 2.8M per task
   Avg time: 145s per task
 
   Output: benchmarks/results/claude-code/celesteanders-harness.json
 ```
 
-Outputs a result JSON with Docker image hash and execution checksum for integrity verification.
+Outputs a result JSON with Docker image hash and SHA-256 execution checksum for integrity verification.
 
 ---
 
@@ -192,7 +279,7 @@ Outputs a result JSON with Docker image hash and execution checksum for integrit
 ### Integrity
 
 - Benchmark runs in a standardized Docker container (`gobbi-runner`)
-- Result JSON includes Docker image hash and execution log checksum
+- Result JSON includes Docker image hash and SHA-256 execution log checksum
 - `submitted_by` field tracks self-submission vs maintainer-run (internal only, not displayed in recommendations)
 
 ---
@@ -207,6 +294,7 @@ Each harness has a `manifest.json`:
   "version": "1.2.0",
   "agent": "claude-code",
   "description": "Separated evaluator + JSON plan-based TDD harness",
+  "published_at": "2026-04-01",
   "tags": {
     "languages": ["python", "typescript"],
     "frameworks": ["any"],
@@ -235,7 +323,9 @@ Each harness has a `manifest.json`:
 }
 ```
 
-The `benchmarks` field is **optional**. An empty array (`"benchmarks": []`) or omission of the field indicates the harness has not yet been benchmarked. Such harnesses are valid for registry inclusion and installation, but appear as **unranked** in `gobbi recommend` output.
+The `published_at` field is **required** (ISO 8601 date, e.g. `"2026-04-01"`). It is used in `gobbi list` output.
+
+The `benchmarks` field is **optional**. An empty array (`"benchmarks": []`) or omission of the field indicates the harness has not yet been benchmarked. Such harnesses are valid for registry inclusion and installation, but appear as **unranked** in `gobbi recommend` output. All `checksum` values in benchmark entries use SHA-256 (`sha256:<hex>` format).
 
 Validated by `.gobbi-schema.json` (JSON Schema). CI enforces validation on every PR.
 
@@ -366,5 +456,5 @@ gobbi/
 |---|---|---|
 | 1 | Specific 20 tasks to include in swe-bench-pro-mini subset | Criteria defined (lang, difficulty, type balance). Actual task selection TBD at implementation. |
 | 2 | Exact Docker base image for benchmark runner | TBD. Needs to support both Claude Code and OpenCode CLI execution. |
-| 3 | CLI interactive UI library | TBD. Candidates: inquirer, prompts, clack. |
-| 4 | Project name validation (npm `gobbi` availability) | TBD. Need to check npm registry. |
+| 3 | CLI interactive UI library | **Resolved.** @clack/prompts. |
+| 4 | Project name validation (npm `gobbi` availability) | **Resolved.** npm `gobbi` is available. |

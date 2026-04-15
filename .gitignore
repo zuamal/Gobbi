@@ -1,0 +1,4 @@
+tasks/
+.CLAUDE/
+node_modules/
+dist/

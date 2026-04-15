@@ -16,6 +16,7 @@ Registry lives in `registry/`, CLI source in `cli/src/`, benchmarks in `benchmar
 - **Testing**: vitest — implementation is not done until tests pass
 - **Build**: tsup (single-file bundle)
 - **Package manager**: pnpm
+- **Logger**: No external library. User-facing messages use `@clack/prompts` log methods (`log.info`, `log.warn`, `log.error`). Debug output uses a thin internal wrapper over `process.stderr.write`.
 
 ---
 
