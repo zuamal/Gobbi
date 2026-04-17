@@ -10,7 +10,8 @@
     "dev": "tsup --watch",
     "build": "tsup",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "generate:schema": "tsx scripts/generate-schema.ts"
   },
   "dependencies": {
     "@clack/prompts": "^0.9.1",
@@ -19,9 +20,12 @@
   },
   "devDependencies": {
     "@types/node": "^20.14.0",
+    "ajv": "^8.17.1",
     "tsup": "^8.1.0",
+    "tsx": "^4.19.2",
     "typescript": "^5.4.5",
-    "vitest": "^1.6.0"
+    "vitest": "^1.6.0",
+    "zod-to-json-schema": "^3.24.5"
   },
   "pnpm": {
     "onlyBuiltDependencies": ["esbuild"]

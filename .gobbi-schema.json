@@ -1,0 +1,127 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "agent": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "published_at": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "object",
+      "properties": {
+        "languages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "frameworks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "scale": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "style": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "languages",
+        "frameworks",
+        "scale",
+        "style"
+      ]
+    },
+    "files": {
+      "type": "object",
+      "properties": {
+        "claude_md": {
+          "type": "string"
+        },
+        "skills": {
+          "type": "string"
+        },
+        "hooks": {
+          "type": "string"
+        },
+        "mcp": {
+          "type": "string"
+        }
+      }
+    },
+    "benchmarks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "suite": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string"
+          },
+          "model_version": {
+            "type": "string"
+          },
+          "pass_rate": {
+            "type": "number"
+          },
+          "total_tokens": {
+            "type": "number"
+          },
+          "avg_time_sec": {
+            "type": "number"
+          },
+          "run_date": {
+            "type": "string"
+          },
+          "docker_image_hash": {
+            "type": "string"
+          },
+          "checksum": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "suite",
+          "model",
+          "model_version",
+          "pass_rate",
+          "total_tokens",
+          "avg_time_sec",
+          "run_date",
+          "docker_image_hash",
+          "checksum"
+        ]
+      }
+    }
+  },
+  "required": [
+    "name",
+    "version",
+    "agent",
+    "description",
+    "published_at",
+    "tags"
+  ]
+}
