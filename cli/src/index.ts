@@ -2,6 +2,7 @@ import { Command } from 'commander'
 import { createRecommendCommand } from './commands/recommend.js'
 import { createInstallCommand } from './commands/install.js'
 import { createUninstallCommand } from './commands/uninstall.js'
+import { createBenchmarkCommand } from './commands/benchmark.js'
 
 const program = new Command()
 
@@ -13,5 +14,6 @@ program
 program.addCommand(createRecommendCommand())
 program.addCommand(createInstallCommand())
 program.addCommand(createUninstallCommand())
+program.addCommand(createBenchmarkCommand())
 
 await program.parseAsync(process.argv)
