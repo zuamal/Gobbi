@@ -2,3 +2,5 @@ tasks/
 .CLAUDE/
 node_modules/
 dist/
+cli/README.md
+cli/LICENSE
