@@ -18,7 +18,7 @@ Gobbi는 오픈소스 CLI로 다음을 제공합니다:
 ## 설치
 
 ```bash
-npm install -g gobbi
+npm install -g @zuamal/gobbi
 ```
 
 ## 커맨드

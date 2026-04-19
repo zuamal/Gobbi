@@ -421,7 +421,7 @@ gobbi/
 | Component | Choice | Rationale |
 |---|---|---|
 | CLI | TypeScript (Node.js) | Target users are in npm ecosystem; JSON-native |
-| Package | npm (`gobbi`) | Standard distribution for CLI tools |
+| Package | npm (`@zuamal/gobbi`) | Standard distribution for CLI tools |
 | Registry | Git repository (this repo) | No infra needed; PRs as submission mechanism |
 | Benchmark runner | Docker | Reproducible environment |
 | CI | GitHub Actions | Schema validation, checksum verification |
@@ -457,4 +457,4 @@ gobbi/
 | 1 | Specific 20 tasks to include in swe-bench-pro-mini subset | Criteria defined (lang, difficulty, type balance). Actual task selection TBD at implementation. |
 | 2 | Exact Docker base image for benchmark runner | TBD. Needs to support both Claude Code and OpenCode CLI execution. |
 | 3 | CLI interactive UI library | **Resolved.** @clack/prompts. |
-| 4 | Project name validation (npm `gobbi` availability) | **Resolved.** npm `gobbi` is available. |
+| 4 | Project name validation (npm `gobbi` availability) | **Resolved.** npm `gobbi` 유사명 정책으로 사용 불가. 패키지명 `@zuamal/gobbi`로 결정. |

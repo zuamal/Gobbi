@@ -1,5 +1,5 @@
 {
-  "name": "gobbi",
+  "name": "@zuamal/gobbi",
   "version": "0.1.0",
   "description": "Harness registry, benchmark, and installer CLI for coding agents",
   "license": "MIT",

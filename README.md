@@ -18,7 +18,7 @@ Gobbi is an open-source CLI that:
 ## Installation
 
 ```bash
-npm install -g gobbi
+npm install -g @zuamal/gobbi
 ```
 
 ## Commands
