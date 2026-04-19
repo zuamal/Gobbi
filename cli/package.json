@@ -1,11 +1,11 @@
 {
   "name": "@zuamal/gobbi",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Harness registry, benchmark, and installer CLI for coding agents",
   "license": "MIT",
   "type": "module",
   "bin": {
-    "gobbi": "./dist/index.js"
+    "gobbi": "dist/index.js"
   },
   "files": [
     "dist/",
@@ -17,11 +17,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/zuamal/gobbi.git"
+    "url": "git+https://github.com/zuamal/Gobbi.git"
   },
-  "homepage": "https://github.com/zuamal/gobbi#readme",
+  "homepage": "https://github.com/zuamal/Gobbi#readme",
   "bugs": {
-    "url": "https://github.com/zuamal/gobbi/issues"
+    "url": "https://github.com/zuamal/Gobbi/issues"
   },
   "keywords": [
     "ai",
@@ -56,6 +56,8 @@
     "zod-to-json-schema": "^3.24.5"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["esbuild"]
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
   }
 }

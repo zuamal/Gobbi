@@ -1,0 +1,17 @@
+{
+  "name": "vanilla",
+  "version": "1.0.0",
+  "agent": "claude-code",
+  "description": "Baseline configuration with no harness customization",
+  "published_at": "2026-04-19",
+  "tags": {
+    "languages": ["any"],
+    "frameworks": ["any"],
+    "scale": ["solo", "small-team"],
+    "style": ["baseline", "minimal"]
+  },
+  "files": {
+    "claude_md": "./CLAUDE.md"
+  },
+  "benchmarks": []
+}
