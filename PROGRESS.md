@@ -6,6 +6,7 @@ stages: [CLI 개발, npm 배포, 벤치마크 구축, 레지스트리 확장]
 stage: 벤치마크 구축
 next: swe-bench-pro-mini 20개 태스크 목록 확정
 resume: v0.1.1을 npm에 배포하고 vanilla 하네스만 등록한 상태(2026-04-19). benchmarks/ 디렉토리(suite·runner Dockerfile)를 만들고, gobbi-spec.md §10의 미결정 1·2번(태스크 20개, Docker 베이스 이미지)부터 정하면 됨.
+link: https://www.npmjs.com/package/@zuamal/gobbi
 ---
 
 ## CLI 개발
